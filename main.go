@@ -44,7 +44,7 @@ func (r *Recorder) Write(p []byte) (int, error) {
 	return len(p), nil
 }
 
-func (r *Recorder) CopyWithWait(out *os.File) error {
+func (r *Recorder) CopyWithWait(out io.Writer) error {
 	for _, rec := range r.records {
 		time.Sleep(rec.time)
 		_, err := out.Write(rec.bytes)
