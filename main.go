@@ -1,25 +1,44 @@
 package main
 
 import (
+	"errors"
 	"io"
 	"os"
+	"strconv"
 	"time"
 )
 
+var Usage = errors.New("Usage: twice [count]")
+
 func main() {
-	if err := Main(os.Stdin, os.Stdout); err != nil {
+	if err := Main(os.Stdin, os.Stdout, os.Args); err != nil {
 		panic(err)
 	}
 }
 
-func Main(in, out *os.File) error {
+func Main(in, out *os.File, args []string) error {
+	if len(args) > 2 {
+		return Usage
+	}
+	count := 2
+	if len(args) == 2 {
+		var err error
+		count, err = strconv.Atoi(args[1])
+		if err != nil {
+			return err
+		}
+	}
+	count--
+
 	rec := NewRecorder()
 	tee := io.MultiWriter(rec, out)
 	io.Copy(tee, in)
-	if err := rec.CopyWithWait(out); err != nil {
-		return err
+	for i := 0; i < count || count < 0; i++ {
+		err := rec.CopyWithWait(out)
+		if err != nil {
+			return err
+		}
 	}
-
 	return nil
 }
 
