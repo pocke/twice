@@ -19,6 +19,8 @@ $ sl | twice # Run SL twice
 $ cowsay meow | flowterm | twice
 ```
 
+![out](https://user-images.githubusercontent.com/4361134/27827644-39455198-60f3-11e7-827b-6665c7bbeee7.gif)
+
 Recommend
 ----------
 
